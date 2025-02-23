@@ -27,7 +27,15 @@ class GameViewModel: ObservableObject {
         let badCookies = Int(Double(config.totalCookies) * config.badCookieRatio)
         var queue = Array(repeating: true, count: config.totalCookies - badCookies)
         queue.append(contentsOf: Array(repeating: false, count: badCookies))
-        return queue.shuffled()
+        
+        // Shuffle all cookies except the first one
+        if queue.count > 1 {
+            let firstCookie = true // Force first cookie to be good
+            var remainingCookies = Array(queue.dropFirst()).shuffled()
+            queue = [firstCookie] + remainingCookies
+        }
+        
+        return queue
     }
     
     private func startGameTimer() {

@@ -38,16 +38,16 @@ struct TutorialView: View {
     var body: some View {
         VStack(spacing: 10) {
             // Progress indicators
-            HStack(spacing: 4) {
-                ForEach(0..<tutorialContent.count, id: \.self) { index in
-                    Circle()
-                        .fill(index == currentPage ? Color.blue : Color.gray.opacity(0.3))
-                        .frame(width: 8, height: 8)
-                }
-            }
-            .padding(.top, 8)
+            // HStack(spacing: 4) {
+            //     ForEach(0..<tutorialContent.count, id: \.self) { index in
+            //         Circle()
+            //             .fill(index == currentPage ? Color.blue : Color.gray.opacity(0.3))
+            //             .frame(width: 8, height: 8)
+            //     }
+            // }
+            // .padding(.top, 8)
             
-            Spacer()
+            // Spacer()
             
             // Tutorial content
             VStack(spacing: 8) {
@@ -69,7 +69,7 @@ struct TutorialView: View {
                 }
                 .foregroundColor(.red)
                 
-                Spacer()
+                // Spacer()
                 
                 if currentPage < tutorialContent.count - 1 {
                     Button("Next") {

@@ -19,7 +19,7 @@ struct GameView: View {
                         .scaledToFit()
                         .frame(width: 140, height: 140)
                         .scaleEffect(isPressed || isAnimating ? 0.8 : 1.0)
-                        .animation(.easeInOut(duration: 0.1), value: isPressed || isAnimating)
+                        .animation(.easeInOut(duration: 0.05), value: isPressed || isAnimating)
                         .gesture(
                             LongPressGesture(minimumDuration: 0.05)
                                 .updating($isPressed) { _, state, _ in
@@ -31,7 +31,7 @@ struct GameView: View {
                         )
                     
                     if !currentCookie && viewModel.isBadCookieTimerActive {
-                        Text("Cookie disappearing...")
+                        Text("Watch out!")
                             .font(.caption)
                             .foregroundColor(.red)
                     } else {
@@ -96,7 +96,7 @@ struct GameView: View {
         viewModel.handleCookieClick()
         
         // Reset animation after a short delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             isAnimating = false
         }
     }
