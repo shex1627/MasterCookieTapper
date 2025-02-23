@@ -117,4 +117,18 @@ class GameViewModel: ObservableObject {
             UserDefaults.standard.set(data, forKey: "gameRecords")
         }
     }
+
+    // Method to delete a specific record
+    func deleteRecord(_ record: GameRecord) {
+        if let index = gameRecords.firstIndex(where: { $0.id == record.id }) {
+            gameRecords.remove(at: index)
+            saveRecords() // Assuming you have a method to save records
+        }
+    }
+    
+    // Method to reset all records
+    func resetAllRecords() {
+        gameRecords.removeAll()
+        saveRecords() // Assuming you have a method to save records
+    }
 }

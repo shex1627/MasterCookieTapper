@@ -12,7 +12,7 @@ struct HomeView: View {
                 .buttonStyle(.bordered)
                 
                 NavigationLink("Records") {
-                    RecordsView(records: viewModel.gameRecords)
+                    RecordsView(records: $viewModel.gameRecords)
                 }
                 .buttonStyle(.bordered)
                 

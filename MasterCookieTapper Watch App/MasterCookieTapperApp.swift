@@ -26,3 +26,4 @@ struct CookieClickerApp: App {
         }
     }
 }
+ 
