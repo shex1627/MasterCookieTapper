@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D89EDCF22D6ABD01002FCD89 /* MasterCookieTapper Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = D89EDCF12D6ABD01002FCD89 /* MasterCookieTapper Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D89EDD202D6AD238002FCD89 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D89EDD1F2D6AD238002FCD89 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 /* Begin PBXFileReference section */
 		D89EDCEB2D6ABD01002FCD89 /* MasterCookieTapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MasterCookieTapper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D89EDCF12D6ABD01002FCD89 /* MasterCookieTapper Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MasterCookieTapper Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D89EDD1F2D6AD238002FCD89 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS11.2.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -52,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D89EDD202D6AD238002FCD89 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				D89EDCF52D6ABD01002FCD89 /* MasterCookieTapper Watch App */,
+				D89EDD1E2D6AD238002FCD89 /* Frameworks */,
 				D89EDCEC2D6ABD01002FCD89 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,6 +77,14 @@
 				D89EDCF12D6ABD01002FCD89 /* MasterCookieTapper Watch App.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D89EDD1E2D6AD238002FCD89 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D89EDD1F2D6AD238002FCD89 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -333,7 +345,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Debug;
 		};
@@ -364,7 +376,7 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Release;
 		};

@@ -2,6 +2,9 @@ import SwiftUI
 
 struct GameView: View {
     @ObservedObject var viewModel: GameViewModel
+    @GestureState private var isPressed: Bool = false
+    @State private var isAnimating: Bool = false
+
     
     var body: some View {
         ZStack {
@@ -15,12 +18,17 @@ struct GameView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 140, height: 140)
-                        .onTapGesture {
-                            viewModel.handleCookieClick()
-                        }
-                        .onChange(of: viewModel.cookieQueue) { _ in
-                            viewModel.startBadCookieTimer()
-                        }
+                        .scaleEffect(isPressed || isAnimating ? 0.8 : 1.0)
+                        .animation(.easeInOut(duration: 0.1), value: isPressed || isAnimating)
+                        .gesture(
+                            LongPressGesture(minimumDuration: 0.05)
+                                .updating($isPressed) { _, state, _ in
+                                    state = true
+                                }
+                                .onEnded { _ in
+                                    handleCookiePress(isGoodCookie: currentCookie)
+                                }
+                        )
                     
                     if !currentCookie && viewModel.isBadCookieTimerActive {
                         Text("Cookie disappearing...")
@@ -30,6 +38,8 @@ struct GameView: View {
                         Text("Cookies: \(viewModel.config.totalCookies - viewModel.cookieQueue.count)/\(viewModel.config.totalCookies)")
                             .font(.caption)
                     }
+                }.onChange(of: viewModel.cookieQueue) { _ in
+                    viewModel.startBadCookieTimer()
                 }
             } else {
                 // Game over state with button at bottom
@@ -68,6 +78,26 @@ struct GameView: View {
         .padding()
         .onAppear {
             viewModel.startNewGame()
+        }
+    }
+
+    private func handleCookiePress(isGoodCookie: Bool) {
+        // Play appropriate sound
+        if isGoodCookie {
+            SoundManager.shared.playGoodCookieSound()
+        } else {
+            SoundManager.shared.playBadCookieSound()
+        }
+        
+        // Trigger click animation
+        isAnimating = true
+        
+        // Handle cookie click in view model
+        viewModel.handleCookieClick()
+        
+        // Reset animation after a short delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            isAnimating = false
         }
     }
 }
