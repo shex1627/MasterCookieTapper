@@ -8,10 +8,10 @@
 import SwiftUI
 
 @main
-struct MasterCookieTapper_Watch_AppApp: App {
+struct CookieClickerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView()
         }
     }
 }
