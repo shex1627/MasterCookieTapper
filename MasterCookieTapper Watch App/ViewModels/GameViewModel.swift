@@ -1,13 +1,15 @@
 import SwiftUI
 
 class GameViewModel: ObservableObject {
-    @Published var cookieQueue: [Bool] = [] // true = good cookie, false = bad cookie
+    @Published var cookieQueue: [Bool] = []
     @Published var currentTime: TimeInterval = 0
     @Published var isGameActive: Bool = false
     @Published var gameRecords: [GameRecord] = []
+    @Published var isBadCookieTimerActive = false
     
-    private var timer: Timer?
-    private let config: GameConfig
+    private var gameTimer: Timer?
+    private var badCookieTimer: Timer?
+    let config: GameConfig
     
     init(config: GameConfig = GameConfig()) {
         self.config = config
@@ -18,20 +20,45 @@ class GameViewModel: ObservableObject {
         cookieQueue = generateCookieQueue()
         currentTime = 0
         isGameActive = true
-        startTimer()
+        startGameTimer()
     }
     
     private func generateCookieQueue() -> [Bool] {
-        let badCookies = max(1, Int(Double(config.totalCookies) * config.badCookieRatio))
+        let badCookies = Int(Double(config.totalCookies) * config.badCookieRatio)
         var queue = Array(repeating: true, count: config.totalCookies - badCookies)
         queue.append(contentsOf: Array(repeating: false, count: badCookies))
         return queue.shuffled()
     }
     
-    private func startTimer() {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+    private func startGameTimer() {
+        gameTimer?.invalidate()
+        gameTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             self?.currentTime += 0.1
+        }
+    }
+    
+    func startBadCookieTimer() {
+        // Only start the timer if the current cookie is bad
+        guard !cookieQueue.isEmpty && !cookieQueue[0] else { return }
+        
+        isBadCookieTimerActive = true
+        badCookieTimer?.invalidate()
+        
+        badCookieTimer = Timer.scheduledTimer(withTimeInterval: config.badCookieDisappearTime, repeats: false) { [weak self] _ in
+            self?.handleBadCookieTimeout()
+        }
+    }
+    
+    private func handleBadCookieTimeout() {
+        guard !cookieQueue.isEmpty && !cookieQueue[0] else { return }
+        
+        // Remove the bad cookie and add penalty
+        cookieQueue.removeFirst()
+        currentTime += config.penaltySeconds
+        isBadCookieTimerActive = false
+        
+        if cookieQueue.isEmpty {
+            endGame()
         }
     }
     
@@ -39,10 +66,13 @@ class GameViewModel: ObservableObject {
         guard !cookieQueue.isEmpty else { return }
         
         let isBadCookie = !cookieQueue[0]
-        cookieQueue.removeFirst()
         
         if isBadCookie {
+            // Don't remove bad cookie on click, just apply penalty
             currentTime += config.penaltySeconds
+        } else {
+            // Remove good cookie and continue
+            cookieQueue.removeFirst()
         }
         
         if cookieQueue.isEmpty {
@@ -51,9 +81,12 @@ class GameViewModel: ObservableObject {
     }
     
     private func endGame() {
-        timer?.invalidate()
-        timer = nil
+        gameTimer?.invalidate()
+        gameTimer = nil
+        badCookieTimer?.invalidate()
+        badCookieTimer = nil
         isGameActive = false
+        isBadCookieTimerActive = false
         
         let record = GameRecord(id: UUID(), completionTime: currentTime, date: Date())
         gameRecords.append(record)
